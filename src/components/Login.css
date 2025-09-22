@@ -1,0 +1,195 @@
+/* src/components/Login.css */
+
+/* Main container that centers the login form on the page */
+.login-container {
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient background */
+  padding: 20px;
+}
+
+/* Wrapper for the form with styling */
+.login-form-wrapper {
+  background: white;
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  padding: 40px;
+  width: 100%;
+  max-width: 400px; /* Limit maximum width */
+  animation: fadeInUp 0.6s ease-out; /* Entrance animation */
+}
+
+/* Animation for smooth entrance */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form styling */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between form elements */
+}
+
+/* Title styling */
+.login-title {
+  text-align: center;
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+/* Subtitle styling */
+.login-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+/* Error message styling */
+.error-message {
+  background-color: #fee; /* Light red background */
+  border: 1px solid #fcc; /* Red border */
+  color: #c33; /* Red text */
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Form group container */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Label styling */
+.form-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+/* Input field styling */
+.form-input {
+  padding: 12px 16px;
+  border: 2px solid #e1e5e9; /* Light border */
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s ease; /* Smooth transitions */
+  background-color: #fafafa;
+}
+
+/* Input field focus state */
+.form-input:focus {
+  outline: none; /* Remove default outline */
+  border-color: #667eea; /* Blue border on focus */
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); /* Subtle glow */
+}
+
+/* Disabled input styling */
+.form-input:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Submit button styling */
+.login-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+/* Button hover effect */
+.login-button:hover:not(:disabled) {
+  transform: translateY(-2px); /* Lift effect */
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Button loading state */
+.login-button.loading {
+  background: #ccc; /* Gray background when loading */
+  cursor: not-allowed;
+  transform: none; /* Remove hover effects */
+}
+
+/* Disabled button styling */
+.login-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Footer section styling */
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Forgot password link */
+.forgot-password-link {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: #764ba2;
+  text-decoration: underline;
+}
+
+/* Demo credentials section (remove in production) */
+.demo-credentials {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #667eea;
+  font-size: 12px;
+  color: #666;
+}
+
+.demo-credentials p {
+  margin: 4px 0;
+}
+
+.demo-credentials strong {
+  color: #333;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 10px;
+  }
+  
+  .login-form-wrapper {
+    padding: 30px 20px;
+  }
+  
+  .login-title {
+    font-size: 24px;
+  }
+}
