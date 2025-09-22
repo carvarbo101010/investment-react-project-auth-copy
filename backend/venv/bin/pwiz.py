@@ -1,4 +1,4 @@
-#!/home/carvarbo/Documents/investment-react-project-auth/backend/venv/bin/python3
+#!/home/carvarbo/Documents/investment-react-project-auth-copy/backend/venv/bin/python3
 
 import datetime
 import os
