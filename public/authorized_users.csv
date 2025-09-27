@@ -1,0 +1,5 @@
+email,name,role
+admin@example.com,Admin User,admin
+john.doe@company.com,John Doe,user
+jane.smith@company.com,Jane Smith,user
+analyst@company.com,Financial Analyst,analyst

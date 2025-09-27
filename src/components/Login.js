@@ -141,9 +141,12 @@ const Login = () => {
 
           {/* Demo credentials display */}
           <div className="demo-credentials">
-            <p><strong>Demo Credentials:</strong></p>
-            <p>Email: admin@example.com</p>
-            <p>Password: password123</p>
+            <p><strong>Authorized Users (from CSV):</strong></p>
+            <p>admin@example.com</p>
+            <p>john.doe@company.com</p>
+            <p>jane.smith@company.com</p>
+            <p>analyst@company.com</p>
+            <p><small>Password: Any 6+ characters</small></p>
           </div>
         </form>
       </div>

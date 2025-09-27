@@ -1,5 +1,6 @@
 // src/contexts/AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { checkUserAuthorization, getUserFromCSV } from '../utils/csvAuth';
 
 // Create a context for authentication state management
 const AuthContext = createContext();
@@ -70,20 +71,46 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Mock login function for demonstration (remove this when you have a real backend)
-  const mockLogin = (email, password) => {
-    // Simple validation for demo purposes
-    if (email === 'admin@example.com' && password === 'password123') {
-      const userData = { id: 1, email, name: 'Admin' };
-      
-      localStorage.setItem('authToken', 'mock-jwt-token');
-      localStorage.setItem('userData', JSON.stringify(userData));
-      
-      setIsAuthenticated(true);
-      setUser(userData);
-      return { success: true };
+  // CSV-based login function
+  const csvLogin = async (email, password) => {
+    try {
+      // Check if user is authorized via CSV
+      const isAuthorized = await checkUserAuthorization(email);
+
+      if (!isAuthorized) {
+        return { success: false, error: 'User not authorized. Please contact administrator.' };
+      }
+
+      // Get user details from CSV
+      const userData = await getUserFromCSV(email);
+
+      if (!userData) {
+        return { success: false, error: 'User data not found.' };
+      }
+
+      // For demo purposes, accept any password for authorized users
+      // In production, you'd verify the password against a secure backend
+      if (password && password.length >= 6) {
+        const userInfo = {
+          id: Date.now(), // Generate a simple ID
+          email: userData.email,
+          name: userData.name,
+          role: userData.role
+        };
+
+        localStorage.setItem('authToken', 'csv-auth-token');
+        localStorage.setItem('userData', JSON.stringify(userInfo));
+
+        setIsAuthenticated(true);
+        setUser(userInfo);
+        return { success: true };
+      } else {
+        return { success: false, error: 'Password must be at least 6 characters long.' };
+      }
+    } catch (error) {
+      console.error('CSV Login error:', error);
+      return { success: false, error: 'Authentication service error. Please try again.' };
     }
-    return { success: false, error: 'Invalid credentials' };
   };
 
   // Logout function
@@ -101,7 +128,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     isAuthenticated,
     user,
-    login: mockLogin, // Use 'login' for real API, 'mockLogin' for demo
+    login: csvLogin, // CSV-based authentication
     logout,
     loading
   };
