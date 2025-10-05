@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import FinancialChatSidebar from './FinancialChatSidebar';
 import '../App.css';
 
 function InvestmentDashboard() {
@@ -19,6 +20,7 @@ function InvestmentDashboard() {
   const [cashFlowData, setCashFlowData] = useState([]);
   const [earningsGrowthData, setEarningsGrowthData] = useState([]);
   const [roeData, setRoeData] = useState([]);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleGetAllMetrics = async () => {
     if (!ticker.trim()) {
@@ -53,7 +55,7 @@ function InvestmentDashboard() {
   };
 
   const formatNumber = (num) => {
-    if (num === null || num === undefined || isNaN(num)) return 'N/A';
+    if (num === null || num === undefined || isNaN(num) || num === 'NaN') return 'N/A';
     if (Math.abs(num) >= 1e9) {
       return `$${(num / 1e9).toFixed(2)}B`;
     } else if (Math.abs(num) >= 1e6) {
@@ -271,6 +273,12 @@ function InvestmentDashboard() {
           </div>
         </section>
       </main>
+
+      {/* Financial AI Chat Sidebar */}
+      <FinancialChatSidebar
+        isOpen={isChatOpen}
+        onToggle={() => setIsChatOpen(!isChatOpen)}
+      />
     </div>
   );
 }

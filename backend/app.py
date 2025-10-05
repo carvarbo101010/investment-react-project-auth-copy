@@ -1,4 +1,5 @@
 import io
+import os
 from datetime import datetime
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
@@ -195,17 +196,21 @@ def calculate_cash_flow():
             # Net change in cash
             net_change = operating_cf + investing_cf + financing_cf
 
+            # Convert NaN values to None for JSON serialization
+            def clean_nan(value):
+                return None if pd.isna(value) else value
+
             # Add to data list
             data_list.append({
                 'year': year,
                 'stock': ticker,
-                'operating_cash_flow': operating_cf,
-                'investing_cash_flow': investing_cf,
-                'financing_cash_flow': financing_cf,
-                'free_cash_flow': free_cashflow,
+                'operating_cash_flow': clean_nan(operating_cf),
+                'investing_cash_flow': clean_nan(investing_cf),
+                'financing_cash_flow': clean_nan(financing_cf),
+                'free_cash_flow': clean_nan(free_cashflow),
                 'fcf_calculation': fcf_note,
-                'capex': capex,
-                'net_change_in_cash': net_change
+                'capex': clean_nan(capex),
+                'net_change_in_cash': clean_nan(net_change)
             })
 
         return jsonify({'data': data_list})
@@ -623,6 +628,68 @@ def generate_roe_csv():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+@app.route('/api/chat', methods=['POST'])
+def chat_with_ai():
+    try:
+        data = request.json
+        user_message = data.get('message')
+        context = data.get('context', 'general')
+
+        if not user_message:
+            return jsonify({'error': 'Message is required'}), 400
+
+        # For now, return a simulated financial advice response
+        # In production, you would integrate with OpenAI API here
+        financial_responses = {
+            "sectors": "Based on current market conditions, technology and healthcare sectors show strong growth potential. Consider diversified ETFs in these areas.",
+            "analysis": "When analyzing stocks, focus on key metrics: P/E ratio, debt-to-equity, free cash flow, and ROE. Look for companies with consistent earnings growth.",
+            "investment": "Consider a diversified portfolio with 60% stocks, 30% bonds, and 10% alternative investments. Dollar-cost averaging can reduce risk.",
+            "default": "I'm here to help with your financial questions. Feel free to ask about investment strategies, stock analysis, or market trends."
+        }
+
+        # Simple keyword matching for demo
+        response_text = financial_responses["default"]
+        user_lower = user_message.lower()
+
+        if any(word in user_lower for word in ["sector", "invest", "where"]):
+            response_text = financial_responses["sectors"]
+        elif any(word in user_lower for word in ["analyze", "analysis", "evaluate", "stock"]):
+            response_text = financial_responses["analysis"]
+        elif any(word in user_lower for word in ["portfolio", "strategy", "plan"]):
+            response_text = financial_responses["investment"]
+
+        # Note: To integrate with OpenAI, you would replace the above with:
+        #
+        # import openai
+        # openai.api_key = os.getenv('OPENAI_API_KEY')
+        #
+        # financial_prompt = f"""You are a professional financial advisor with expertise in investment strategies,
+        # stock analysis, and market trends. Provide helpful, accurate financial advice.
+        #
+        # User question: {user_message}
+        #
+        # Please provide a concise, professional response with actionable insights."""
+        #
+        # response = openai.ChatCompletion.create(
+        #     model="gpt-3.5-turbo",
+        #     messages=[
+        #         {"role": "system", "content": "You are a professional financial advisor."},
+        #         {"role": "user", "content": financial_prompt}
+        #     ],
+        #     max_tokens=500,
+        #     temperature=0.7
+        # )
+        #
+        # response_text = response.choices[0].message.content
+
+        return jsonify({
+            'response': response_text,
+            'context': context
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/health', methods=['GET'])
 def health_check():
